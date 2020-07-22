@@ -10,27 +10,21 @@ const NavBar: React.FC = () => {
       <Container>
         <ul>
           <li>
-            <DropdownOption 
-              name="Produtos"
-              content={ () => <h1>Sub</h1> }
-              />
+            <DropdownOption name="Produtos" content={() => <h1>Sub</h1>} />
           </li>
           <li>
-            <DropdownOption 
+            <DropdownOption
               name="Desenvolvedores"
-              content={ () => <h1>Sub</h1> }
+              content={() => <h1>Sub</h1>}
             />
           </li>
           <li>
-            <DropdownOption 
-              name="Empresa"
-              content={ () => <h1>Sub</h1> }
-              />
+            <DropdownOption name="Empresa" content={() => <h1>Sub</h1>} />
           </li>
         </ul>
       </Container>
     </DropdownStyles>
-  )
-}
+  );
+};
 
 export default NavBar;
