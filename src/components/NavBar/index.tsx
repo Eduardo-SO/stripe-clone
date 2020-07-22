@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Company, Developers, Products } from '../Content';
 import { DropdownOption } from '../DropdownOption';
 
 import { Container, DropdownStyles } from './styles';
@@ -10,16 +11,13 @@ const NavBar: React.FC = () => {
       <Container>
         <ul>
           <li>
-            <DropdownOption name="Produtos" content={() => <h1>Sub</h1>} />
+            <DropdownOption name="Produtos" content={Company} />
           </li>
           <li>
-            <DropdownOption
-              name="Desenvolvedores"
-              content={() => <h1>Sub</h1>}
-            />
+            <DropdownOption name="Desenvolvedores" content={Developers} />
           </li>
           <li>
-            <DropdownOption name="Empresa" content={() => <h1>Sub</h1>} />
+            <DropdownOption name="Empresa" content={Products} />
           </li>
         </ul>
       </Container>
