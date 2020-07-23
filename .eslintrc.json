@@ -37,6 +37,7 @@
     "import/prefer-default-export": "off",
     "import/no-duplicates": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
+    "no-param-reassign": "off",
     "@typescript-eslint/explicit-function-return-type": [
       "error",
       {
