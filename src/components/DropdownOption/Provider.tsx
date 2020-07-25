@@ -8,7 +8,20 @@ interface Item {
   backgroundHeight: number;
 }
 
-export const Context = createContext({});
+interface DropdownContextData {
+  options: Item[];
+  targetId: number | null;
+  cachedId: number | null;
+  setTargetId: React.Dispatch<React.SetStateAction<null>>;
+  registerOption(item: Item): void;
+  updateOptionProps(optionId: number, props: any): void;
+  getOptionById(id: number): Item | undefined;
+  deleteOptionById(id: number): void;
+}
+
+export const Context = createContext<DropdownContextData>(
+  {} as DropdownContextData,
+);
 
 export const DropdownProvider: React.FC = ({ children }) => {
   const [options, setOptions] = useState<Item[]>([]);
@@ -69,6 +82,10 @@ export const DropdownProvider: React.FC = ({ children }) => {
   return (
     <Context.Provider
       value={{
+        options,
+        targetId,
+        cachedId,
+        setTargetId,
         registerOption,
         updateOptionProps,
         getOptionById,
