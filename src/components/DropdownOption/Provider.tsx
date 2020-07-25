@@ -8,7 +8,7 @@ interface Item {
   backgroundHeight: number;
 }
 
-const Context = createContext({});
+export const Context = createContext({});
 
 export const DropdownProvider: React.FC = ({ children }) => {
   const [options, setOptions] = useState<Item[]>([]);
