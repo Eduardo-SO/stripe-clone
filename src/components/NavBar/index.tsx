@@ -12,13 +12,19 @@ const NavBar: React.FC = () => {
         <Container>
           <ul>
             <li>
-              <DropdownOption name="Produtos" content={Company} />
+              <DropdownOption name="Produtos">
+                <Company />
+              </DropdownOption>
             </li>
             <li>
-              <DropdownOption name="Desenvolvedores" content={Developers} />
+              <DropdownOption name="Desenvolvedores">
+                <Developers />
+              </DropdownOption>
             </li>
             <li>
-              <DropdownOption name="Empresa" content={Products} />
+              <DropdownOption name="Empresa">
+                <Products />
+              </DropdownOption>
             </li>
           </ul>
         </Container>

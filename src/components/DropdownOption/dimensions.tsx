@@ -4,7 +4,7 @@ const getDimensions = (element: Element): ClientRect =>
   element.getBoundingClientRect();
 
 export const useDimensions = (
-  responsive: boolean,
+  responsive = true,
 ): (Element | ClientRect | ((e: Element) => void) | null)[] => {
   const [dimensions, setDimensions] = useState<ClientRect | null>(null);
   const [element, setElement] = useState<Element | null>(null);
