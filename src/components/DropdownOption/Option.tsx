@@ -20,7 +20,7 @@ export const DropdownOption: React.FC<DropdownOptionProps> = ({
   const idRef = useRef(lastOptionId + 1);
   const id = idRef.current;
 
-  const [optionHook, optionDimentions] = useDimensions();
+  const [optionHook, optionDimentions] = useDimensions<ClientRect | null>();
 
   const {
     registerOption,
@@ -44,13 +44,15 @@ export const DropdownOption: React.FC<DropdownOptionProps> = ({
       };
     }
 
-    registerOption({
-      id,
-      optionDimentions,
-      optionCenterX: optionDimentions.x + optionDimentions.width / 2,
-      WrappedContent,
-      backgroundHeight,
-    });
+    if (optionDimentions) {
+      registerOption({
+        id,
+        optionDimentions,
+        optionCenterX: optionDimentions.x + optionDimentions.width / 2,
+        WrappedContent,
+        backgroundHeight,
+      });
+    }
 
     setRegistered(true);
   }, [
