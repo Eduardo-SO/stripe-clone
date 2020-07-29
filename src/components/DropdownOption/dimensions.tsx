@@ -1,15 +1,19 @@
 import { useState, useCallback, useLayoutEffect } from 'react';
 
-const getDimensions = (element: Element): ClientRect =>
+interface Dimensions {
+  hook(e: HTMLButtonElement): void;
+  dimensions: DOMRect | undefined;
+  element: HTMLButtonElement | undefined;
+}
+
+const getDimensions = (element: Element): DOMRect =>
   element.getBoundingClientRect();
 
-export const useDimensions = (
-  responsive = true,
-): (Element | ClientRect | ((e: Element) => void) | null)[] => {
-  const [dimensions, setDimensions] = useState<ClientRect | null>(null);
-  const [element, setElement] = useState<Element | null>(null);
+export const useDimensions = (responsive = true): Dimensions => {
+  const [dimensions, setDimensions] = useState<DOMRect>();
+  const [element, setElement] = useState<HTMLButtonElement | undefined>();
 
-  const hook = useCallback((e: Element) => setElement(e), []);
+  const hook = useCallback((e: HTMLButtonElement) => setElement(e), []);
 
   useLayoutEffect(() => {
     if (element) {
@@ -29,5 +33,5 @@ export const useDimensions = (
     }
   }, [element, responsive]);
 
-  return [hook, dimensions, element];
+  return { hook, dimensions, element };
 };
