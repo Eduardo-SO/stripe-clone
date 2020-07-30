@@ -1,4 +1,10 @@
-import React, { useState, useRef, useContext, useEffect } from 'react';
+import React, {
+  useState,
+  useRef,
+  useContext,
+  useEffect,
+  useCallback,
+} from 'react';
 import { motion } from 'framer-motion';
 
 import { useDimensions } from './dimensions';
@@ -22,6 +28,7 @@ export const DropdownOption: React.FC<DropdownOptionProps> = ({
 
   const { hook, dimensions } = useDimensions();
   const [registered, setRegistered] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const {
     registerOption,
@@ -68,13 +75,43 @@ export const DropdownOption: React.FC<DropdownOptionProps> = ({
     backgroundHeight,
     dimensions,
     id,
-    registerOption,
     registered,
+    registerOption,
+    deleteOptionById,
     updateOptionProps,
   ]);
 
+  const handleOpen = useCallback(() => {
+    !isMobile && setTargetId(id);
+  }, [id, isMobile, setTargetId]);
+
+  const handleClose = useCallback(() => {
+    !isMobile && setTargetId(0);
+  }, [isMobile, setTargetId]);
+
+  const handleTouch = useCallback(() => setIsMobile(true), []);
+
+  const handleClick = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+
+      return targetId === id ? handleClose() : handleOpen();
+    },
+    [handleClose, handleOpen, id, targetId],
+  );
+
   return (
-    <motion.button type="button" className="dropdown-option" ref={hook}>
+    <motion.button
+      type="button"
+      className="dropdown-option"
+      ref={hook}
+      onMouseDown={handleClick}
+      onHoverStart={handleOpen}
+      onHoverEnd={handleClose}
+      onTouchStart={handleTouch}
+      onFocus={handleOpen}
+      onBlur={handleClose}
+    >
       {name}
     </motion.button>
   );
