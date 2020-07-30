@@ -2,19 +2,27 @@ import React, { useState, createContext, useCallback, useEffect } from 'react';
 
 interface Item {
   id: number;
-  optionDimensions: number;
+  optionDimensions: DOMRect;
+  contentDimensions?: DOMRect;
   optionCenterX: number;
-  WrappedContent: number;
-  backgroundHeight: number;
+  WrappedContent: React.FC;
+  backgroundHeight: number | undefined;
+}
+
+interface UpdateOptionProps {
+  contentDimensions?: DOMRect | undefined;
+  optionDimensions?: DOMRect;
+  optionCenterX?: number;
 }
 
 interface DropdownContextData {
   options: Item[];
-  targetId: number | null;
-  cachedId: number | null;
-  setTargetId: React.Dispatch<React.SetStateAction<null>>;
+  targetId: number;
+  cachedId: number;
+  setCachedId: React.Dispatch<React.SetStateAction<number>>;
+  setTargetId: React.Dispatch<React.SetStateAction<number>>;
   registerOption(item: Item): void;
-  updateOptionProps(optionId: number, props: any): void;
+  updateOptionProps(optionId: number, props: UpdateOptionProps): void;
   getOptionById(id: number): Item | undefined;
   deleteOptionById(id: number): void;
 }
@@ -25,8 +33,8 @@ export const Context = createContext<DropdownContextData>(
 
 export const DropdownProvider: React.FC = ({ children }) => {
   const [options, setOptions] = useState<Item[]>([]);
-  const [targetId, setTargetId] = useState(null);
-  const [cachedId, setCachedId] = useState(null);
+  const [targetId, setTargetId] = useState(0);
+  const [cachedId, setCachedId] = useState(0);
 
   const registerOption = useCallback(
     ({
@@ -35,7 +43,7 @@ export const DropdownProvider: React.FC = ({ children }) => {
       optionCenterX,
       WrappedContent,
       backgroundHeight,
-    }) => {
+    }: Item) =>
       setOptions(items => [
         ...items,
         {
@@ -45,13 +53,12 @@ export const DropdownProvider: React.FC = ({ children }) => {
           WrappedContent,
           backgroundHeight,
         },
-      ]);
-    },
-    [setOptions],
+      ]),
+    [],
   );
 
   const updateOptionProps = useCallback(
-    (optionId, props) => {
+    (optionId, props) =>
       setOptions(items =>
         items.map(item => {
           if (item.id === optionId) {
@@ -60,19 +67,18 @@ export const DropdownProvider: React.FC = ({ children }) => {
 
           return item;
         }),
-      );
-    },
-    [setOptions],
+      ),
+    [],
   );
 
   const getOptionById = useCallback(
-    id => options.find(item => item.id === id),
+    (id: number) => options.find(item => item.id === id),
     [options],
   );
 
   const deleteOptionById = useCallback(
-    id => setOptions(items => items.filter(item => item.id !== id)),
-    [setOptions],
+    (id: number) => setOptions(items => items.filter(item => item.id !== id)),
+    [],
   );
 
   useEffect(() => {
@@ -86,6 +92,7 @@ export const DropdownProvider: React.FC = ({ children }) => {
         targetId,
         cachedId,
         setTargetId,
+        setCachedId,
         registerOption,
         updateOptionProps,
         getOptionById,

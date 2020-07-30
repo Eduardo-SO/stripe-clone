@@ -6,21 +6,22 @@ import { Context } from './Provider';
 
 interface DropdownOptionProps {
   name: string;
+  content: React.FC;
   backgroundHeight?: number;
 }
+
+let lastOptionId = 0;
 
 export const DropdownOption: React.FC<DropdownOptionProps> = ({
   name,
   backgroundHeight,
-  children,
+  content: Content,
 }) => {
-  const [lastOptionId, setLastOptionId] = useState(0);
-  const [registered, setRegistered] = useState(false);
-
-  const idRef = useRef(lastOptionId + 1);
+  const idRef = useRef((lastOptionId += 1));
   const id = idRef.current;
 
-  const [optionHook, optionDimentions] = useDimensions<ClientRect | null>();
+  const { hook, dimensions } = useDimensions();
+  const [registered, setRegistered] = useState(false);
 
   const {
     registerOption,
@@ -31,43 +32,49 @@ export const DropdownOption: React.FC<DropdownOptionProps> = ({
   } = useContext(Context);
 
   useEffect(() => {
-    if (!registered && optionDimentions) {
-      const WrappedContent = (): React.ReactElement => {
+    if (!registered && dimensions) {
+      const WrappedContent: React.FC = () => {
         const contentRef = useRef<HTMLDivElement>(null);
 
         useEffect(() => {
           const contentDimensions = contentRef.current?.getBoundingClientRect();
+
           updateOptionProps(id, { contentDimensions });
         }, []);
 
-        return <div ref={contentRef}>{children}</div>;
+        return (
+          <div ref={contentRef}>
+            <Content />
+          </div>
+        );
       };
-    }
 
-    if (optionDimentions) {
       registerOption({
         id,
-        optionDimentions,
-        optionCenterX: optionDimentions.x + optionDimentions.width / 2,
+        optionDimensions: dimensions,
+        optionCenterX: dimensions.x + dimensions.width / 2,
         WrappedContent,
         backgroundHeight,
       });
-    }
 
-    setRegistered(true);
+      setRegistered(true);
+    } else if (registered && dimensions) {
+      updateOptionProps(id, {
+        optionDimensions: dimensions,
+        optionCenterX: dimensions.x + dimensions.width / 2,
+      });
+    }
   }, [
     backgroundHeight,
-    children,
+    dimensions,
     id,
-    optionDimentions,
     registerOption,
     registered,
-    targetId,
     updateOptionProps,
   ]);
 
   return (
-    <motion.button type="button" className="dropdown-option">
+    <motion.button type="button" className="dropdown-option" ref={hook}>
       {name}
     </motion.button>
   );

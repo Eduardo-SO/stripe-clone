@@ -6,12 +6,12 @@ interface Dimensions {
   element: HTMLButtonElement | undefined;
 }
 
-const getDimensions = (element: Element): DOMRect =>
+const getDimensions = (element: HTMLElement): DOMRect =>
   element.getBoundingClientRect();
 
 export const useDimensions = (responsive = true): Dimensions => {
   const [dimensions, setDimensions] = useState<DOMRect>();
-  const [element, setElement] = useState<HTMLButtonElement | undefined>();
+  const [element, setElement] = useState<HTMLButtonElement>();
 
   const hook = useCallback((e: HTMLButtonElement) => setElement(e), []);
 
@@ -19,7 +19,7 @@ export const useDimensions = (responsive = true): Dimensions => {
     if (element) {
       const updateDimensions = (): void => {
         window.requestAnimationFrame(() => {
-          setDimensions(getDimensions(element));
+          return setDimensions(getDimensions(element));
         });
       };
 
@@ -28,10 +28,12 @@ export const useDimensions = (responsive = true): Dimensions => {
       if (responsive) {
         window.addEventListener('resize', updateDimensions);
 
-        window.removeEventListener('resize', updateDimensions);
+        return window.removeEventListener('resize', updateDimensions);
       }
     }
-  }, [element, responsive]);
+
+    return undefined;
+  }, [element, hook, responsive]);
 
   return { hook, dimensions, element };
 };
