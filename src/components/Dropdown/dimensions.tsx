@@ -26,9 +26,12 @@ export const useDimensions = (responsive = true): Dimensions => {
       updateDimensions();
 
       if (responsive) {
+        console.log('oasjnd');
         window.addEventListener('resize', updateDimensions);
 
-        return window.removeEventListener('resize', updateDimensions);
+        return () => {
+          window.removeEventListener('resize', updateDimensions);
+        };
       }
     }
 

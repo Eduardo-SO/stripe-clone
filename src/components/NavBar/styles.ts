@@ -16,11 +16,8 @@ export const DropdownStyles = styled.div`
   .dropdown-option {
     padding: 20px 25px;
     outline: 0;
-
     color: #fff;
-
     font-size: 18px;
-
     transition: opacity 0.2s;
 
     &:hover,
@@ -35,13 +32,43 @@ export const DropdownStyles = styled.div`
   }
 
   .dropdown-arrow {
+    position: relative;
+
+    &::before {
+      position: absolute;
+      content: '';
+      top: -6.5px;
+      left: -8px;
+
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+
+      background: #fff;
+
+      transform: rotate(45deg);
+    }
   }
 
   .dropdown-container {
     position: absolute;
+    overflow: hidden;
+    box-shadow: 0 50px 100px -20px rgba(50, 50, 93, 0.25),
+      0 30px 60px -30px rgba(0, 0, 0, 0.3),
+      0 -18px 60px -10px rgba(0, 0, 0, 0.025);
+
+    background: #fff;
+    border-radius: 4px;
   }
 
   .dropdown-section {
     position: absolute;
+  }
+
+  .dropdown-background {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: #f6f9fc;
   }
 `;

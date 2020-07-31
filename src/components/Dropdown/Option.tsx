@@ -81,6 +81,8 @@ export const DropdownOption: React.FC<DropdownOptionProps> = ({
     updateOptionProps,
   ]);
 
+  useEffect(() => deleteOptionById(id), [deleteOptionById, id]);
+
   const handleOpen = useCallback(() => {
     !isMobile && setTargetId(id);
   }, [id, isMobile, setTargetId]);

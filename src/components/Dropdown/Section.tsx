@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { motion } from 'framer-motion';
 
 import { Item, Context } from './Provider';
@@ -12,8 +12,11 @@ export const DropdownSection: React.FC<DropdownSectionProps> = ({ option }) => {
 
   const { id, contentDimensions, optionCenterX } = option;
 
-  const contentWidth = contentDimensions?.width || 0;
-  const x = optionCenterX - contentWidth / 2;
+  const x = useMemo(() => {
+    const contentWidth = contentDimensions?.width || 0;
+
+    return optionCenterX - contentWidth / 2;
+  }, [contentDimensions, optionCenterX]);
 
   const isActive = cachedId === id;
 

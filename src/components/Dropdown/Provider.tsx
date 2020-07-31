@@ -1,6 +1,6 @@
 import React, { useState, createContext, useCallback, useEffect } from 'react';
 
-interface Item {
+export interface Item {
   id: number;
   optionDimensions: DOMRect;
   contentDimensions?: DOMRect;
@@ -57,19 +57,17 @@ export const DropdownProvider: React.FC = ({ children }) => {
     [],
   );
 
-  const updateOptionProps = useCallback(
-    (optionId, props) =>
-      setOptions(items =>
-        items.map(item => {
-          if (item.id === optionId) {
-            item = { ...item, ...props };
-          }
+  const updateOptionProps = useCallback((optionId, props) => {
+    setOptions(items =>
+      items.map(item => {
+        if (item.id === optionId) {
+          item = { ...item, ...props };
+        }
 
-          return item;
-        }),
-      ),
-    [],
-  );
+        return item;
+      }),
+    );
+  }, []);
 
   const getOptionById = useCallback(
     (id: number) => options.find(item => item.id === id),
@@ -82,7 +80,7 @@ export const DropdownProvider: React.FC = ({ children }) => {
   );
 
   useEffect(() => {
-    if (targetId !== null) setCachedId(targetId);
+    targetId && setCachedId(targetId);
   }, [targetId]);
 
   return (
